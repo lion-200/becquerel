@@ -50,7 +50,7 @@ console.log("connecting to db " + dburl);
 
 mongoose.set('debug', config.mongodebug);
 mongoose.connect(dburl, {
-  useMongoClient: true,
+  //useMongoClient: true,
   /* other options */
 });
 
