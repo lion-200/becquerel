@@ -43,7 +43,7 @@ var dburl = 'mongodb://localhost:27017/curie'
 
 if (config.db_user)
 {
-  dburl = 'mongodb://' + config.db_user + ':' + config.db_pwd + '@'  + config.db_url + '/' + config.db_name
+    dburl = 'mongodb+srv://' + config.db_user + ':' + config.db_pwd + '@'  + config.db_url + '/' + config.db_name
 }
 
 console.log("connecting to db " + dburl); 
