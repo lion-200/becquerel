@@ -45,7 +45,8 @@
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "sc2-sdk": "^1.1.0",
-    "steem": "^0.6.7"
+    "steem": "^0.6.7",
+    "steemconnect": "3.0.3"
   },
   "cacheDirectories": [
     "node_modules",

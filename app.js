@@ -18,10 +18,7 @@ mongoose.Promise = require('bluebird');
 
 var config = require('./config')
 var cron = require('./modules/cron')
-
-
-
-
+var steemconnect = require('steemconnect');
 
 var app = express();
 
@@ -38,7 +35,7 @@ if (config.production) {
 }
 
 //app.use(logger('dev'));
-
+console.log("test node_env " + process.env.NODE_ENV); 
 var dburl = 'mongodb://localhost:27017/curie'
 
 if (config.db_user)
@@ -54,7 +51,6 @@ mongoose.connect(dburl, {
   //useMongoClient: true,
   /* other options */
 });
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

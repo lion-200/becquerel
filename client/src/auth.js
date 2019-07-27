@@ -12,17 +12,28 @@ export default class Auth {
 //     scope: 'openid'
 //   });
 
-  login = () => {
+  login = (username, sctoken) => {
       // get our server to call steemconnect which redirects to a callback
    // this.auth0.authorize();
    console.log("authorising");
-    fetch('/authorize', { method: 'POST'})
-    .then(response => {
+      fetch('/authorize', {
+          method: 'POST',
+          headers: new Headers({
+              'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+          }),
+          body: "username=" + username + "&sctoken=" + sctoken
+      })
+          .then(response => {
+              return response.json();
         // HTTP 301 response
       //  console.log("Response from login is : " + response);
      //   console.log("redirecting client to /authorize");
-        window.location.href = response.url; // this will redirect us to the callback url (/auth)
-    })
+        //window.location.href = response.url; // this will redirect us to the callback url (/auth)
+          })
+          .then(data => {
+              this.setSession(data);
+              window.location.href = '/';
+          })
     .catch(function(err) {
         console.info(err);
     });

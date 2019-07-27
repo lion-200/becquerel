@@ -1,4 +1,4 @@
-var steemconnect = require('../modules/steemconnect')
+var steemconnect = require('steemconnect')
 var express = require('express');
 var router = express.Router();
 var User = require('../model/user');
@@ -7,17 +7,79 @@ var config = require('../config');
 var request = require('request');
 
 
+var client = new steemconnect.Client({
+    app: config.auth.client_id,
+    callbackURL: config.auth.redirect_uri,
+    scope: ['login']
+});
+
 /* GET auth listing. */
 // this is the generic call to get authorised with steemconnect
 router.post('/', (req, res, next) => {
+    
     //console.log("auth called server side");
     if (!req.token ) {
-        // you havent got an access token but you might already be authed with  steemconnect
+        const loginObj = {};
+        if (req.body.username) loginObj.username = req.body.username;
+        client.setAccessToken(req.body.sctoken);
+
+        client.me(function (err, steemResponse) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    var username = steemResponse.user;
+                    User.find({ 'user': username }, function (err, obj) {
+                        var data = JSON.parse(JSON.stringify(obj));
+                        if (data) {
+                            if (data[0]) {
+                                var perms = {
+                                    user: data[0].user,
+                                    curator: data[0].curator,
+                                    reviewer: data[0].reviewer,
+                                    accounter: data[0].accounter,
+                                    administrator: data[0].administrator,
+                                    sctoken: req.token,
+                                    expires_in: new Date().getTime() + 604800000
+                                }
+                                var wrappedToken = jwt.sign(perms, config.jwtsecret, {
+                                    expiresIn: 604800 // expires in a week
+                                });
+
+                                req.session.steemconnect = steemResponse.account;
+                                perms.token = wrappedToken;
+
+                                res.json(perms);
+                            }
+                            else {
+                                // TO-DO return user not created response
+                                res.json({ "err": " User does not exist in database" });
+                            }
+                        }
+                        else {
+                            res.json({ "err": "Problem with login" });
+                        }
+
+
+                    });
+                }
+                //console.log('Verification result', err, result);
+                //if (result) self.username = result.name;
+                //if (err) self.error = err;
+
+                //localStorage.setItem('sc_token', token);
+                //self.isLoading = false;
+            });
+        //});
+
+        //event.preventDefault();
+
 
         //console.log("no access token sent - redirecting to steemconnect");
-        let uri = steemconnect.getLoginURL();
+        //let uri = client.getLoginURL("");
+        //return uri;
         //console.log(uri);
-        res.redirect(uri);
+        //res.redirect(uri);
     } else {
         // this is called once the user has received their access token
 
