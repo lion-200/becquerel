@@ -8,6 +8,7 @@ var rp = require('request-promise-native');
 var moment = require('moment');
 var util = require('../modules/util');
 var logger = require('../modules/logger');
+var config = require('../config');
 
 var log = logger.routerLogger;
 
@@ -295,8 +296,8 @@ router.post('/close/:id', async function(req, res, next) {
   
 });
 
-router.post('/' , validateAuth(['curator']), function(req, res, next) {
-
+router.post('/', validateAuth(['curator']), function(req, res, next) {
+    //console.log('in post');
     //console.log("in post" + JSON.stringify(req.body.submittedValues));
     var post = new Post();
     //body parser lets us use the req.body
@@ -309,10 +310,11 @@ router.post('/' , validateAuth(['curator']), function(req, res, next) {
 
    
     var url = post.url + ".json";
-    //console.log(url);
+    var urlCa = config.ca_url + post.url;
+    log.debug(urlCa);
     var options = {
         method: 'GET',
-        uri: url,
+        uri: urlCa,
         gzip: true,
         json: true // Automatically parses the JSON string in the response
     };

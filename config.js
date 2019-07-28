@@ -14,8 +14,8 @@ let config = {
     db_pwd : process.env.DB_PWD,
     jwtsecret: process.env.JWT_SECRET,
     mongodebug : false,
-    upvoteuser : "curie"
-  
+    upvoteuser: "curie",
+    ca_url : process.env.CA_URL  
 };
 
 module.exports = config;
