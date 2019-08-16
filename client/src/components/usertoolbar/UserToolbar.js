@@ -9,8 +9,6 @@ import steemconnect from 'steemconnect'
 import NavPanel from '../navpanel/NavPanel';
 
 class UserToolbar extends Component {
-
-
     
   constructor( props ) {
       super( props );
@@ -31,10 +29,10 @@ class UserToolbar extends Component {
     }
 
     handleSubmit(event) {
-
+        
         var client = new steemconnect.Client({
-            app: 'becquerel',
-            callbackURL: 'https://becq.herokuapp.com',//'https://www.becquerel.io',
+            app: "becq",
+            callbackURL: "https://becq.herokuapp.com/auth",//'https://www.becquerel.io',
             scope: ['login']
         });
         const self = this;
@@ -43,6 +41,7 @@ class UserToolbar extends Component {
         if (this.state.value) loginObj.username = this.state.value;
 
         var accesstoken = "";
+
         client.login(loginObj, function (err, token) {
             if (err) return self.isLoading = false;
             client.setAccessToken(token);
