@@ -49,7 +49,7 @@ module.exports.urlString = () => {
 }
 
 module.exports.isAuthenticated = (req, res, next, permission) => {
-   // console.log("isAuthenticated :" + permission);
+   // console.log("isAuthenticated :" + permission);    
 
     var jsontoken = JSON.parse(req.token);
 
@@ -105,7 +105,7 @@ module.exports.isAuthenticated = (req, res, next, permission) => {
 
                 }
             }
-            return res.status(401).send({ err: 'Failed to authenticate token.' });;
+            return res.status(401).send({ err: 'Failed to authorize user.' });;
 
             // }
         }
