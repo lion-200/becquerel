@@ -90,7 +90,7 @@ class UserToolbar extends Component {
                           <Nav>
                               <br />
                               <form onSubmit={this.handleSubmit}>
-                                  <input type="text" value={this.state.value} onChange={this.handleChange} />
+                                  <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="username" />
                                   <input type="submit" value="Login" />
                               </form>
                           </Nav> 

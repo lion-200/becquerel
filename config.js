@@ -15,7 +15,8 @@ let config = {
     jwtsecret: process.env.JWT_SECRET,
     mongodebug : false,
     upvoteuser: "curie",
-    ca_url : process.env.CA_URL  
+    ca_url: process.env.CA_URL,
+    use_ca: process.env.USE_CA
 };
 
 module.exports = config;

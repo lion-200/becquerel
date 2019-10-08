@@ -296,8 +296,7 @@ router.post('/close/:id', async function(req, res, next) {
   
 });
 
-router.post('/', validateAuth(['curator']), function(req, res, next) {
-    //console.log('in post');
+router.post('/', validateAuth(['curator']), function(req, res, next) {    
     //console.log("in post" + JSON.stringify(req.body.submittedValues));
     var post = new Post();
     //body parser lets us use the req.body
@@ -307,18 +306,19 @@ router.post('/', validateAuth(['curator']), function(req, res, next) {
     post.submittedtime = moment().utc();
     let authuser = req.token != "null" && req.token ?  JSON.parse(req.token).user : "No User";
     log.debug("route=posts,username=" + authuser + ",endpoint=/:" + post.url);
-
-   
+       
     var url = post.url + ".json";
-    var urlCa = config.ca_url + post.url;
-    log.debug(urlCa);
+    if (config.use_ca === "true") {
+        url = config.ca_url + post.url;
+    }    
+    
     var options = {
         method: 'GET',
-        uri: urlCa,
+        uri: url,
         gzip: true,
         json: true // Automatically parses the JSON string in the response
     };
-
+    
     rp(options)
     .then(async function (data) {
       // console.log(data);
